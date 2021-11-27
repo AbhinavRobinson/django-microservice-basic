@@ -8,32 +8,41 @@ from .serializers import ProductSerializer
 
 class ProductViewSet(viewsets.ViewSet):
 
-    # /api/products
-    def list(self, request: Request) -> Response:
+    # /api/products GET
+    @staticmethod
+    def list(_: Request) -> Response:
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
-    def create(self, request: Request) -> Response:
+    # /api/products POST
+    @staticmethod
+    def create(request: Request) -> Response:
         print(request.data)
         serializer = ProductSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def retrieve(self, request, pk=None):  # <str:id>
+    # /api/products/<str:id> GET
+    @staticmethod
+    def retrieve(_: Request, pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         serializer = ProductSerializer(product)
         return Response(serializer.data)
 
-    def update(self, request, pk=None):  # <str:id>
+    # /api/products/<str:id> PUT
+    @staticmethod
+    def update(request: Request, pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         serializer = ProductSerializer(product, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
-    def destroy(self, request, pk=None):  # <str:id>
+    # /api/products/<str:id> DELETE
+    @staticmethod
+    def destroy(_: Request, pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
