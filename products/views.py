@@ -24,9 +24,14 @@ class ProductViewSet(viewsets.ViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    # /api/products/ OPTIONS
+    @staticmethod
+    def count(_: Request) -> Response:
+        return Response(Product.objects.count())
+
     # /api/products/<str:id> GET
     @staticmethod
-    def retrieve(_: Request, pk: str = None) -> Response:
+    def retrieve(pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         serializer = ProductSerializer(product)
         return Response(serializer.data)
@@ -42,7 +47,7 @@ class ProductViewSet(viewsets.ViewSet):
 
     # /api/products/<str:id> DELETE
     @staticmethod
-    def destroy(_: Request, pk: str = None) -> Response:
+    def destroy(pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
