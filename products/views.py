@@ -54,7 +54,10 @@ class ProductViewSet(viewsets.ViewSet):
 
     # /api/products/likes/<str:id> GET
     @staticmethod
-    def more_than_likes(pk: str = None) -> Response:
-        products = Product.objects.filter(likes__gt=pk)
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+    def more_than_likes(_, pk: str = None) -> Response:
+        try:
+            products = Product.objects.filter(likes__gt=int(pk)-1)
+            serializer = ProductSerializer(products, many=True)
+            return Response(serializer.data)
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
