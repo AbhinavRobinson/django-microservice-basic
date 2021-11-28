@@ -8,4 +8,5 @@ class Product(models.Model):
 
 
 class User(models.Model):
-    pass
+    name = models.CharField(max_length=200, default='John Doe')
+    email = models.CharField(max_length=200, default='johndoe@nomail.com')

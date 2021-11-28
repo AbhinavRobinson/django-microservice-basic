@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ProductViewSet
+from .views import ProductViewSet, UserViewSet
 
 urlpatterns = [
     path('products', ProductViewSet.as_view({
@@ -16,4 +16,8 @@ urlpatterns = [
     path('products/likes/<str:pk>', ProductViewSet.as_view({
         'get': 'more_than_likes'
     })),
+    path('user', UserViewSet.as_view({
+        'get': 'get',
+        'post': 'create'
+    }))
 ]

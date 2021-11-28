@@ -1,9 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, User
+from .serializers import ProductSerializer, UserSerializer
+
+import random
 
 
 class ProductViewSet(viewsets.ViewSet):
@@ -61,3 +64,24 @@ class ProductViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserViewSet(viewsets.ViewSet):
+    @staticmethod
+    def get(_: Request) -> Response:
+        users = User.objects.all()
+        if not users:
+            return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        user = random.choice(users)
+        return Response({
+            'id': user.id,
+            'username': user.name,
+            'email': user.email
+        })
+
+    @staticmethod
+    def create(request: Request) -> Response:
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
