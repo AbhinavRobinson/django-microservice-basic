@@ -51,3 +51,10 @@ class ProductViewSet(viewsets.ViewSet):
         product = Product.objects.get(id=pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # /api/products/likes/<str:id> GET
+    @staticmethod
+    def more_than_likes(pk: str = None) -> Response:
+        products = Product.objects.filter(likes__gt=pk)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)

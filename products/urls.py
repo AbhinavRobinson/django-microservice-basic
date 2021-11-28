@@ -12,5 +12,8 @@ urlpatterns = [
         'get': 'retrieve',
         'put': 'update',
         'delete': 'destroy'
-    }))
+    })),
+    path('products/likes/<str:pk>', ProductViewSet.as_view({
+        'get': 'more_than_likes'
+    })),
 ]
