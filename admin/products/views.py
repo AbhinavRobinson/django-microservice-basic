@@ -34,7 +34,7 @@ class ProductViewSet(viewsets.ViewSet):
 
     # /api/products/<str:id> GET
     @staticmethod
-    def retrieve(pk: str = None) -> Response:
+    def retrieve(_: Request, pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         serializer = ProductSerializer(product)
         return Response(serializer.data)
@@ -50,14 +50,14 @@ class ProductViewSet(viewsets.ViewSet):
 
     # /api/products/<str:id> DELETE
     @staticmethod
-    def destroy(pk: str = None) -> Response:
+    def destroy(_: Request, pk: str = None) -> Response:
         product = Product.objects.get(id=pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     # /api/products/likes/<str:id> GET
     @staticmethod
-    def more_than_likes(_, pk: str = None) -> Response:
+    def more_than_likes(_: Request, pk: str = None) -> Response:
         try:
             products = Product.objects.filter(likes__gt=int(pk)-1)
             serializer = ProductSerializer(products, many=True)

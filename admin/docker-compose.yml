@@ -1,4 +1,4 @@
-version: '3.10'
+version: '3.9'
 services:
   backend:
     build:
@@ -12,7 +12,7 @@ services:
       - db
 
   db:
-    image: mysql/mysql-server:8.0.23
+    image: ubuntu/mysql
     restart: always
     environment:
       MYSQL_DATABASE: admin
