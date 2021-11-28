@@ -1,7 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import Product, User
 from .serializers import ProductSerializer, UserSerializer
@@ -81,6 +80,8 @@ class UserViewSet(viewsets.ViewSet):
 
     @staticmethod
     def create(request: Request) -> Response:
+        if request.data.get('name') in [None, ''] or request.data.get('email') in [None, '']:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
