@@ -1,7 +1,9 @@
 import pika
 
+from .apps import ProductsConfig
+
 # add ampq link
-params = pika.URLParameters('')
+params = pika.URLParameters(ProductsConfig.amqpUrl)
 
 # create connection
 connection = pika.BlockingConnection(params)
@@ -10,6 +12,6 @@ connection = pika.BlockingConnection(params)
 channel = connection.channel()
 
 
-def publish(_method, body: dict):
+def publish(body):
     # call publish
     channel.basic_publish(exchange='', routing_key='admin', body=body)
